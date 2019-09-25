@@ -27,6 +27,7 @@ RUN R -e "install.packages(c('Rcpp', 'shiny', 'rmarkdown', 'tm', 'wordcloud', 'm
 COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
 COPY /forecast /srv/shiny-server/
 
+
 EXPOSE 80
 
 COPY shiny-server.sh /usr/bin/shiny-server.sh
