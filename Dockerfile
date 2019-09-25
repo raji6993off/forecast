@@ -28,6 +28,7 @@ RUN R -e "install.packages(c('shinythemes'), repos='https://cloud.r-project.org/
 
 # copy the app to the image
 RUN mkdir /root/euler
+
 RUN echo "copying code"
 COPY euler /root/euler
 
