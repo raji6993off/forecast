@@ -38,4 +38,7 @@ EXPOSE 3838
 
 
 
+
+
+
 CMD ["R", "-e", "shiny::runApp('/root/euler')"]
