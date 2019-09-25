@@ -25,7 +25,7 @@ RUN wget --no-verbose https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubu
 RUN R -e "install.packages(c('Rcpp', 'shiny', 'rmarkdown', 'tm', 'wordcloud', 'memoise', 'forecast', 'fma'), repos='http://cran.rstudio.com/')"
 
 COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
-COPY /myapp /srv/shiny-server/
+COPY /forecast /srv/shiny-server/
 
 EXPOSE 80
 
