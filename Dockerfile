@@ -1,36 +1,38 @@
-FROM r-base:latest
+FROM openanalytics/r-base
 
-MAINTAINER Flavio Barros "flaviommbarros@gmail.com"
+MAINTAINER Tobias Verbeke "tobias.verbeke@openanalytics.eu"
 
-
-
+# system libraries of general use
 RUN apt-get update && apt-get install -y \
     sudo \
-    gdebi-core \
     pandoc \
     pandoc-citeproc \
     libcurl4-gnutls-dev \
+    libcairo2-dev \
     libxt-dev \
     libssl-dev \
-    libxml2 \
-    libxml2-dev
+    libssh2-1-dev \
+    libssl1.0.0
 
-# Download and install shiny server
-RUN wget --no-verbose https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/VERSION -O "version.txt" && \
-    VERSION=$(cat version.txt)  && \
-    wget --no-verbose "https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/shiny-server-$VERSION-amd64.deb" -O ss-latest.deb && \
-    gdebi -n ss-latest.deb && \
-    rm -f version.txt ss-latest.deb
+# system library dependency for the euler app
+RUN apt-get update && apt-get install -y \
+    libmpfr-dev
 
-RUN R -e "install.packages(c('Rcpp', 'shiny', 'rmarkdown', 'tm', 'wordcloud', 'memoise', 'forecast', 'fma'), repos='http://cran.rstudio.com/')"
+# basic shiny functionality
+RUN R -e "install.packages(c('shiny', 'rmarkdown'), repos='https://cloud.r-project.org/')"
 
-COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
-COPY /forecast /srv/shiny-server/
+# install dependencies of the euler app
+RUN R -e "install.packages('Rmpfr', repos='https://cloud.r-project.org/')"
+RUN R -e "install.packages(c('fma','forecast'), repos='https://cloud.r-project.org/')"
+RUN R -e "install.packages(c('shinythemes'), repos='https://cloud.r-project.org/')"
 
+# copy the app to the image
+RUN mkdir /root/euler
+RUN echo "copying code"
+COPY euler /root/euler
 
+COPY Rprofile.site /usr/lib/R/etc/
 
-EXPOSE 80
+EXPOSE 3838
 
-COPY shiny-server.sh /usr/bin/shiny-server.sh
-
-CMD ["/usr/bin/shiny-server.sh"]
+CMD ["R", "-e", "shiny::runApp('/root/euler')"]

@@ -1,59 +1,22 @@
-[![Build Status](https://travis-ci.org/flaviobarros/shiny-wordcloud.svg?branch=master)](https://travis-ci.org/flaviobarros/shiny-wordcloud)
-[![DOI](https://zenodo.org/badge/34694294.svg)](https://zenodo.org/badge/latestdoi/34694294)
-[![](https://images.microbadger.com/badges/image/flaviobarros/shiny-wordcloud.svg)](https://microbadger.com/images/flaviobarros/shiny-wordcloud "Get your own image badge on microbadger.com")
-[![](https://images.microbadger.com/badges/version/flaviobarros/shiny-wordcloud.svg)](https://microbadger.com/images/flaviobarros/shiny-wordcloud "Get your own version badge on microbadger.com")
 
-Dockerized Shiny App
-=======================
+# Forecasting Shiny App Using ShinyProxy as Template
 
-This is the Dockerized Shiny App [Wordcloud](http://shiny.rstudio.com/gallery/word-cloud.html)
+This repository provides a template to deploy your own Shiny apps on [ShinyProxy](https://www.shinyproxy.io).
 
-This Dockerfile is based on Debian "testing" and r-base image.
+Full explanation on the contents of this repository is offered at
 
-The image is available from [Docker Hub](https://registry.hub.docker.com/u/flaviobarros/shiny-wordcloud/).
+https://www.shinyproxy.io/deploying-apps/
 
-## Usage:
+The purpose of this repository is to customize it for your needs, but if you want to build a Docker image from the Dockerfile in this repository, navigate into the root directory of this repository and run
 
-To run this Shiny App on your computer:
-
-```sh
-docker run --rm -p 80:80 flaviobarros/shiny-wordcloud
+```
+sudo docker build -t doctorandabox/shinyproxy-forecast .
 ```
 
-and it will avaliable at http://127.0.0.1/ or http://localhost
+Running the image for testing purposes outside ShinyProxy can be done using e.g.
 
-You can run the container at other ports. It can happen that there is some service running at PORT 80, as Apache ou Nginx.
-To run the app at PORT 3838 for example, you can use:
-
-```sh
-docker run --rm -p 3838:80 flaviobarros/shiny-wordcloud
+```
+sudo docker run -it -p 3838:3838 docterandabox/shinyproxy-forecast
 ```
 
-## Intented usage:
-
-This project can be used as a start point to build any dockerized shiny app that could be distributed at any server running docker.
-Possible use cases are:
-
-* Deploy a single Shiny App at AWS, Google Compute Engine, Azure or a private server with docker.
-* Deploy Shiny Apps at a docker based PaaS as [dokku](https://github.com/progrium/dokku). 
-
-## Building your own Shiny App:
-
-After developing your Shiny App, you will need two files for deployment: ui.R and server.R. Then:
-
-* Remove all files from folder mypp (these files are from Wordcloud example) and put your files there, ui.R and server.R
-* Build a docker image with:
-
-```sh
-docker build -t yourname/yourappname .
-```
-
-At this poit you will be able to run your app, just like Wordcloud.
-
-## Deploy with a docker based PaaS
-
-If you have a PaaS with Dockerfiles support, like [Deis](http://deis.io/) or [Dokku](https://github.com/progrium/dokku), you can git push this image. I just wrote a post with further instructions: [Git pushing Shiny Apps with docker and dokku](https://www.rmining.com.br/2015/05/11/git-pushing-shiny-apps-with-docker-dokku/)
-
-## IMPORTANT
-
-This project is not an alternative Shiny Server. It exposes PORT 80 (not 3838) and is intented to serve only single shiny apps.
+(c) Copyright Data Sailing, 2019.
